@@ -1,5 +1,5 @@
-%% clean up the workspace
-clear; close all; clc;
+% This is a demo script for the MATLAB version of the Vaganov-Shashkin model (VSM)
+clear; close all; clc; % clean up the workspace
 
 myColormap = [... % 'Reds' from ColorBrewer
     1.0000    0.9608    0.9412
@@ -24,8 +24,6 @@ mohonk
 T = vsm_filter(T,'A');
 
 %% read in the parameter file
-% e06_parameters; % parameter file used in Evans et al. 2006
-% generic_parameter_setup % generic file
 a06_parameters % parameter file from Anchukaitis et al. 2006
 parameters.rated = 0.0115;  % change drainage rate for the 'Humpty Dumpty' rocky slope at Mohonk - Vaganov et al. 2011
 
@@ -36,16 +34,16 @@ X = lhsdesignbnd(1000,2,[0 11],[10 20],[false false]);
 % overlapping period of meteorological data and tree-ring chronology
 [~,idx1,idx2] = intersect(crn(:,1),syear:eyear);
 
-% for i = 1:length(X)
-%     % [i]
-%     parameters.Tf(1) = X(i,1);
-%     parameters.Tf(2) = X(i,2);
-%     output(i) = vsm(T,P,phi,syear,eyear,parameters);
-%     [Ro(1:2,1:2,i),Po(1:2,1:2,i)] = corrcoef([crn(idx1,2) output(i).trw(idx2)']);
-%     outputt2(:,i) = output(i).trw';
-% end
+for i = 1:length(X)
+     % [i]
+     parameters.Tf(1) = X(i,1);
+     parameters.Tf(2) = X(i,2);
+     output(i) = vsm(T,P,phi,syear,eyear,parameters);
+     [Ro(1:2,1:2,i),Po(1:2,1:2,i)] = corrcoef([crn(idx1,2) output(i).trw(idx2)']);
+     outputt2(:,i) = output(i).trw';
+end
 
-load mohonk_temperature_ensemble_lh2.mat
+% load mohonk_temperature_ensemble_lh2.mat
 
 for j = 1:1000
     meanGrowthRate(:,j) = nanmean(output(j).Gr,2);
@@ -70,7 +68,6 @@ title('EASTERN HEMLOCK, MOHONK, SHAWANGUNK MOUNTAINS')
 xlabel('YEAR')
 set(gca,'xminortick','on','yminortick','on')
 text(1891,3.5,'A','fontsize',14)
-
 
 subplot(2,2,3)
 scatter(X(:,1),X(:,2),50,R0,'filled')

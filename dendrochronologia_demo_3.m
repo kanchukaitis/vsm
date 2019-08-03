@@ -1,4 +1,4 @@
-% This is a demo script fpr the MATLAB version of the Vaganov-Shashkin model (VSM)
+% This is a demo script for the MATLAB version of the Vaganov-Shashkin model (VSM)
 clear; close all; clc;  % clear the workspace
 
 myColormap = [... % 'Reds' from ColorBrewer
@@ -108,4 +108,4 @@ ylabel('% ZERO GROWTH YEARS','rot',-90,'VerticalAlignment','bottom')
 xlabel('T_{minimum}')
 text(-1,23,'C','fontsize',14)
 
-print -depsc indigirka.eps
+print -depsc indigirka_panel.eps

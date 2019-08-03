@@ -1,4 +1,4 @@
-% This is a test script the MATLAB version of the Vaganov-Shashkin model (VSM)
+% This is a demo script for the MATLAB version of the Vaganov-Shashkin model (VSM)
 clear; close all; clc;  % clear the workspace
 
 myColormap = [... % 'Reds' from ColorBrewer
@@ -53,9 +53,7 @@ title('WHITE MOUNTAINS, METHUSELAH WALK')
 xlabel('YEAR')
 set(gca,'xminortick','on','yminortick','on')
 text(1955.5,1.5,'A','fontsize',14)
-%text(1977.5,1.4,['r = ',num2str(Ro(1,2),2)])
 text(1957,1.2,['r = ',num2str(Ro(1,2),'%1.2f') ', p < 0.001'],'fontsize',12) %  num2str(Po(1,2),'%1.5f
-% resizeLegend
 
 subplot(2,2,4)
 plot(mean(output.Gr,2),'k'); hold on;
@@ -84,7 +82,7 @@ set(gca,'xminortick','on','yminortick','on')
 text(335,2.75,'B','fontsize',14)
 
 
-print -depsc vsm_wm1simpletest_matlab.eps
+print -depsc white_panel1.eps
 
 clear Ro Po
 
@@ -143,5 +141,5 @@ xlim([0.0 1])
 text(.05,45,'C','fontsize',14)
 set(gca,'xminortick','on','yminortick','on')
 
-print -depsc vsm_wm1drainage_matlab.eps
+print -depsc white_panel2.eps
 
