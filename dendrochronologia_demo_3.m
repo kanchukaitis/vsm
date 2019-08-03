@@ -1,4 +1,4 @@
-% This is a test script the MATLAB version of the Vaganov-Shashkin model (VSM)
+% This is a demo script fpr the MATLAB version of the Vaganov-Shashkin model (VSM)
 clear; close all; clc;  % clear the workspace
 
 myColormap = [... % 'Reds' from ColorBrewer
