@@ -18,6 +18,12 @@ The code model function is `vsm`. This function runs both the Environmental and 
 [output] = vsm(T,P,phi,syear,eyear,parameters,varargin)
 ```
 
+where `T` is the daily temperature (in ), `P` is the daily precipitation (in ), `phi` is the latitude of the tree-ring site or the latitude of the source of the daily meteorological data, `syear` is the starting year of the simulation (the first year of the daily meteorological data), `year' is the last year of the simulation, and `parameters` is the name of the structure containing the parameters. 
+
+## Known Limitations
+
+The original FORTRAN model was developed for Northern Hemisphere applications.  As a consequence the definition of a year in model time steps is from January to December, which is unlikely to be adequate for Southern Hemisphere applications. 
+
 ## Octave Functionality
 
 The core model function `vsm` works in Octave without modification. Some of the demo scripts, however, use plotting commands not available or with different syntax in Octave
