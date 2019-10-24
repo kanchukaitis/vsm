@@ -18,7 +18,9 @@ The code model function is `vsm`. This function runs both the Environmental and 
 [output] = vsm(T,P,phi,syear,eyear,parameters,varargin)
 ```
 
-where `T` is the daily temperature (in ), `P` is the daily precipitation (in ), `phi` is the latitude of the tree-ring site or the latitude of the source of the daily meteorological data, `syear` is the starting year of the simulation (the first year of the daily meteorological data), `year' is the last year of the simulation, and `parameters` is the name of the structure containing the parameters. 
+where `T` is the daily temperature (in ), `P` is the daily precipitation (in ), `phi` is the latitude of the tree-ring site or the latitude of the source of the daily meteorological data, `syear` is the starting year of the simulation (the first year of the daily meteorological data), `year' is the last year of the simulation, and `parameters` is the name of the structure containing the parameters. `output` is a structure containing the annual, daily, and cell-specific outputs from the simulation. 
+
+`vsm` expects an input structure `parameters` that contains the tunable parameters that determine model behavior. 
 
 ## Known Limitations
 
