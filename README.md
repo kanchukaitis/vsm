@@ -12,9 +12,15 @@ Please inform Kevin Anchukaitis if you identify any bugs.
 
 ## Basic Applications
 
+The code model function is `vsm`. This function runs both the Environmental and Growth blocks using daily temperature and precipitation input as well as latitude (for daylength calculations).  The function call is:
+
+```matlab
+[output] = vsm(T,P,phi,syear,eyear,parameters,varargin)
+```
+
 ## Octave Functionality
 
-The core model code, `vsm` has complete functionality in Octave. Some of the demo scripts, however, use plotting commands not available or with different syntax in Octave
+The core model function `vsm` works in Octave without modification. Some of the demo scripts, however, use plotting commands not available or with different syntax in Octave
 
 ## License
 
