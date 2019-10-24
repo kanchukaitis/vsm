@@ -30,7 +30,7 @@ The original FORTRAN model was developed for Northern Hemisphere applications.  
 
 ## Octave Functionality
 
-The core model function `vsm` works in Octave without modification. Some of the demo scripts, however, use plotting commands not available or with different syntax in Octave
+The core model function `vsm` works in Octave without modification. Some of the demo scripts and the helper functions therein, however, use commands not available or with a different syntax in Octave
 
 ## License
 
