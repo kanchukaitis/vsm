@@ -81,7 +81,6 @@ xlabel('DAY OF YEAR')
 set(gca,'xminortick','on','yminortick','on')
 text(335,2.75,'B','fontsize',14)
 
-
 print -depsc white_panel1.eps
 
 clear Ro Po
@@ -89,7 +88,7 @@ clear Ro Po
 %% test sensitivity to soil drainage rate
 drainageRates = 0.001:0.0001:0.0200; 
 
-tic
+tic  % you may wish to use a coarser range of rates in order to reduce the time spent in this loop
 for i = 1:length(drainageRates)
     parameters.rated = drainageRates(i);
     output(i) = vsm(T,P,phi,syear,eyear,parameters);

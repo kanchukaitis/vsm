@@ -18,6 +18,7 @@ myColormap = [... % 'Reds' from ColorBrewer
 load('305426_mohonk.mat');
 
 % get the Mohonk hemlock chronology, NY004r, Cook and Jacoby 1977
+% originally from: https://www.ncdc.noaa.gov/paleo-search/study/3000
 mohonk
 
 % smooth the input temperature to follow Vaganov et al. 2011
@@ -25,15 +26,19 @@ T = vsm_filter(T,'A');
 
 %% read in the parameter file
 a06_parameters % parameter file from Anchukaitis et al. 2006
-parameters.rated = 0.0115;  % change drainage rate for the 'Humpty Dumpty' rocky slope at Mohonk - Vaganov et al. 2011
+parameters.rated = 0.0115;  % change drainage rate for the 'Humpty Dumpty' rocky slope at Mohonk from Vaganov et al. 2011
 
 % use a Latin Hypercube design to sample from the parameter space for Tf(1)
-% and Tf(2)
-X = lhsdesignbnd(1000,2,[0 11],[10 20],[false false]);
+% and Tf(2) - you may wish to use a smaller design matrix (ensembleSize) to make this demo run faster
+ensembleSize = 1000;
+X = lhsdesignbnd(ensembleSize,2,[0 11],[10 20],[false false]);
 
 % overlapping period of meteorological data and tree-ring chronology
 [~,idx1,idx2] = intersect(crn(:,1),syear:eyear);
 
+%% create an ensemble of reconstructions using the design matrix
+% beware that this look can take quite a long time! depending on the size of the design matrix X
+if 1 % use this to skip the loop by setting to 0 instead of 1
 for i = 1:length(X)
      % [i]
      parameters.Tf(1) = X(i,1);
@@ -41,20 +46,26 @@ for i = 1:length(X)
      output(i) = vsm(T,P,phi,syear,eyear,parameters);
      [Ro(1:2,1:2,i),Po(1:2,1:2,i)] = corrcoef([crn(idx1,2) output(i).trw(idx2)']);
      outputt2(:,i) = output(i).trw';
-end
+end % end the looping over parameters in the design matrix
+end % ends the if/end skip
 
+% if you've previously run the code through the above loop, you may wish to save the output and 
+% skip the loop in order to speed up this demo
+% save mohonk_temperature_ensemble_lh2.mat
 % load mohonk_temperature_ensemble_lh2.mat
 
-for j = 1:1000
+% calculate mean growth rates over years for the ensemble members
+for j = 1:length(X)
     meanGrowthRate(:,j) = nanmean(output(j).Gr,2);
     meanGrowthRateT(:,j) = nanmean(output(j).GrT,2);
     meanGrowthRateW(:,j) = nanmean(output(j).GrW,2); 
 end
 
+% locate the simulation with the highest correlation with the actual chronology
 R0 = squeeze(Ro(1,2,:))
 bestSimulation = find(R0==max(R0)); bestSimulation = bestSimulation(1);
 
-%%
+%% create the primary figure
 figure(2); clf;
 subplot(2,1,1)
 ex2 = plot([syear:eyear],zscore(outputt2),'color',[1 0.7 0.7],'linewidth',1); hold on
@@ -103,5 +114,4 @@ xlabel('DAY OF YEAR','FontSize',12)
 set(gca,'xminortick','on','yminortick','on')
 text(15,0.9,'C','fontsize',14)
 
-% save mohonk_temperature_ensemble_lh2.mat
 printeps('mohonk_panel.eps',2)
