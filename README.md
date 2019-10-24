@@ -26,7 +26,7 @@ where `T` is the daily temperature (in ), `P` is the daily precipitation (in ), 
 
 ## Known Limitations
 
-The original FORTRAN model was developed for Northern Hemisphere applications.  As a consequence the definition of a year in model time steps is from January to December, which is unlikely to be adequate for Southern Hemisphere applications. 
+The original FORTRAN model was developed for Northern Hemisphere applications.  As a consequence the definition of a year in the model is from January 1st to December 31st, which is unlikely to be adequate for Southern Hemisphere applications. 
 
 ## Octave Functionality
 
