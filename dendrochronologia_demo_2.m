@@ -42,12 +42,12 @@ if 1 % use this to skip the loop by setting to 0 instead of 1
 outputt2 = NaN(length(syear:eyear),length(X));
 tic 
 for i = 1:length(X)
-    tic
+    % tic
      parameters.Tf(1) = X(i,1);
      parameters.Tf(2) = X(i,2);
      output(i) = vsm(T,P,phi,syear,eyear,parameters);
      outputt2(:,i) = output(i).trw';
-    toc
+    % toc
 end % end the looping over parameters in the design matrix
 end % ends the if/end skip
 toc

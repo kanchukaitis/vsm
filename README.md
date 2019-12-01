@@ -28,9 +28,12 @@ where `T` is the daily temperature (in ), `P` is the daily precipitation (in ), 
 
 Although the code has been built to attempt to catch errors related to missing input data, you should estimate or fill missing temperature and precipitation data values prior to running `vsm`.  You may use built-in MATLAB functions like `fillmissing`, but we also include a utility function `vsm_fillmiss` that mimics the internal missing value filling in the original FORTRAN code. 
 
+## Speed
+Initial testing of the code in this repository was primarily done on a Macbook Pro (Retina, 15-inch, Mid 2015, 2.8 GHz Intel Core i7, 16 GB 1600 MHz DDR3) running MATLAB R2017b on MacOS 10.13.6 (High Sierra).  A single 22 year simulation (as for the White Mountain bristlecone example) takes approximately 0.20 seconds to complete. A ~80 year simulation (as for the Mohonk Hemlock simulation) take approximately 1.1 seconds to complete. 
+
 ## Demonstration Files
 
-This repository comes with three demonstration files that recreate the figures in the manuscript to demonstrate the functionality of `vsm`. 
+This repository comes with three demonstration files that recreate the figures in the manuscript and demonstrate the functionality of `vsm`. The first (`dendrochronologia_demo_1.m`) reproduces the White Mountain (USA) bristlecone simulations from the manuscript.  This script contains a loop over a range of drainage rate parameter value that can take up 40 second or more to complete depending on your system, but the code is annotated if you wish to reduce the number of drainage rates used for the simulation (default is 191 different rates). The second script (`dendrochronologia_demo_2.m`) reproduces the analysis of the temperature parameter sensitivity at Mohonk (USA) using a Latin Hypercube design (`lhsdesignbnd`).  The manuscript itself uses a design with 1000 draws, but this can require anywhere from 15 to 30 minutes to complete, do the file is set to start with a design of 100 members initially.  The third demonstration script uses syntax for setting the characteristics of `bar` charts introduced in MATLAB R2014B. 
 
 ## Known Limitations
 

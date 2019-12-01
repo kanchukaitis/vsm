@@ -39,6 +39,8 @@ tic % based on testing, this loop may take anywhere from 1 to 20 seconds, depend
 output = vsm(T,P,phi,syear,eyear,parameters);
 toc %  
 
+return
+
 % calculate correlation between actual chronology and simulated
 [Ro] = corrcoef([chronology(:,2) output.trw']);
 

@@ -41,12 +41,11 @@ T0 = T;
 Tfil = vsm_filter(T0,'V'); % close mimic of the internal lowpass FORTRAN filter
 phi = 70.0;
 
-% e06_parameters
+% call the parameter file
 generic_parameters
 
 %% Run the MATLAB mimic model
-for j = 0:10
-    
+for j = 0:10  
     parameters.Tf(1) = j;
     output = vsm(Tfil,P,phi,startYear,endYear,parameters);
     simulatedSeries(:,j+1) = output.trw';
@@ -58,10 +57,9 @@ simulatedSeries(simulatedSeries==0) = NaN;  % for plotting
 load indigirka_chronology.mat
 
 [commonYear,ia,ib] = intersect(allYears,Indigirka(:,1));
-[R,P] = corrcoef([simulatedSeries(ia,:) Indigirka(ib,2)],'rows','pairwise');
-good = find(commonYear~=1991)
+[R,P]   = corrcoef([simulatedSeries(ia,:) Indigirka(ib,2)],'rows','pairwise');
+good    = find(commonYear~=1991);
 [R1,P1] = corrcoef([simulatedSeries(ia(good),:) Indigirka(ib(good),2)],'rows','pairwise');
-
 
 
 %% 
@@ -80,29 +78,29 @@ title('LARCH, INDIGIRKA (YAKUTIA), RUSSIA')
 
 subplot(2,2,3)
 yyaxis left
-ax1 = gca
-bx1 = bar([0:10],R(1:end-1,end))
-bx1.BarWidth=1
+ax1 = gca;
+bx1 = bar([0:10],R(1:end-1,end));
+bx1.BarWidth = 1;
 bx1.FaceColor=[0 0 1];
-ax1.YColor = [0.15 0.15 0.15]
+ax1.YColor = [0.15 0.15 0.15];
 
 ylabel('CORRELATION')
 xlabel('T_{minimum}')
 
 yyaxis right
-ax2 = gca
+ax2 = gca;
 px1 = plot([0:10],P(1:end-1,end),'ro-','MarkerFaceColor','r'); hold on;
 text(8,0.27,'P','color','r')
 plot([0 10],[0.05 0.05],'r--')
 set(gca,'YScale','log')
 text(10.4,0.42,'B','fontsize',14)
 ylabel('SIGNIFICANCE','rot',-90,'VerticalAlignment','bottom')
-ax1.YColor = [1 0 0]
+ax1.YColor = [1 0 0];
 
 subplot(2,2,4)
 bx2 = bar([0:10],100*((sum(isnan(simulatedSeries))-1)./length(simulatedSeries)));
-bx2.BarWidth=1
-bx2.FaceColor = [1 0.8 0.8]
+bx2.BarWidth = 1;
+bx2.FaceColor = [1 0.8 0.8];
 set(gca,'YAxisLocation','right')
 ylabel('% ZERO GROWTH YEARS','rot',-90,'VerticalAlignment','bottom')
 xlabel('T_{minimum}')
