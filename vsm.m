@@ -48,13 +48,14 @@ end
 [SI,RT,AT,KP,DIV]        = deal(NaN(200,eyear - syear + 1)); % cell array variables
 
 % parse operating variables from parameter and climate data
-% [parameter renaming isn't necessary but is done to follow the original FORTRAN]
+% [parameter renaming isn't really necessary but is done to follow the original FORTRAN]
 Vm       = parameters.b(10); % fixed growth rate in S, G2, and M phases of mitosis
+Vs       = parameters.b(1);  % minimum critical growth, parameterized, otherwise dormancy
 SIG1     = parameters.b(11); % maximum size of cell in G1 phase
 SIM      = parameters.b(14); % maximum cell size before mitosis occurs
 tc       = parameters.b(15); % this is the time step in the cambial model  ...
 tn0      = 1/tc;  % ... which determines the cambial model iterations per model day
-
+    
 % set the initial soil depth to the rooting depth from the parameters
 dep(1,1) = parameters.rootd;
 
@@ -128,25 +129,17 @@ for cyear=1:length(iyear)      % begin cycling over years
     sum_temperature = -Inf;                         % (re)initialize sum-of-temperature variable
     tt = 1;                                         % begin on the first day of the year (day counter)
     while sum_temperature < parameters.Tg && tt < ndays(cyear) % as long as sum-of-temperatures has not crossed threshold to begin growth ...
-        if exist('nansum')==2
-		sum_temperature = nansum(T(tt:tt+parameters.K(9),cyear)); % sum over the period set in the parameter K(9)
-	else
-		sum_temperature = sum(T(tt:tt+parameters.K(9),cyear)); % allowd Octave compatibility
-	end
-		fday(cyear) = tt+parameters.K(9);                      % set the first day to begin growth to the current day (in case we cross the threshold)
+        sum_temperature = sum(T(tt:tt+parameters.K(9),cyear)); % used sum (for Octave) over the period set in the parameter K(9)
+        fday(cyear) = tt+parameters.K(9);                      % set the first day to begin growth to the current day (in case we cross the threshold)
         tt = tt + 1;                                % increment the day counter
     end                                             % once growing degree days have crossed threshold, cambial activity can begin
     
     %% SOIL THAWING
     % calculate growing degree days; When is it time to start soil thaw?
     sum_st_temperature = -Inf;  st = 1;                      % (re)initialize sum-of-temperature variable
-    while sum_st_temperature < parameters.Tm && st < ndays(cyear)-parameters.K(10); % as long as sum-of-temperatures has not crossed threshold to begin thaw ...
-        if exist('nansum')==2
-		sum_st_temperature = nansum(T(st:st+parameters.K(10),cyear));    % ... sum over the period set in the parameter K(10)
-	else
-		sum_st_temperature = sum(T(st:st+parameters.K(10),cyear));    % ... allow Octave compatibility
-	end
-		stday(cyear) = st + parameters.K(10);
+    while sum_st_temperature < parameters.Tm && st < ndays(cyear)-parameters.K(10) % as long as sum-of-temperatures has not crossed threshold to begin thaw ...
+        sum_st_temperature = sum(T(st:st+parameters.K(10),cyear));    % ... sum (for Octave), over the period set in the parameter K(10)
+        stday(cyear) = st + parameters.K(10);
         st = st + 1;
         if st == ndays(cyear) - (parameters.K(10) + 1); stday(cyear) = ndays(cyear); end % this is the condition where soil thaw never begins (uncommon at best)
     end
@@ -159,18 +152,17 @@ for cyear=1:length(iyear)      % begin cycling over years
         
         for i = stday(cyear)+1:ndays(cyear)
             dep(i,cyear) = dep(i-1,cyear) + parameters.a(1) * T(i-1,cyear) * exp(-parameters.a(2) * dep(i-1,cyear));
-            if dep(i,cyear) < 0;
+            if dep(i,cyear) < 0
                 dep(i,cyear) = 0; % error catching, has to be a minimum root depth, of course
-            end;
-            if isnan(dep(i,cyear));  % error catching
+            end
+            if isnan(dep(i,cyear))  % error catching
                 dep(i,cyear)=dep(i-1,cyear);
-                if isnan(dep(i,cyear));  % error catching
+                if isnan(dep(i,cyear))  % error catching
                     dep(i,cyear)=parameters.rootd;     % if T(i,cyear) is missing
                 end
             end
         end
     end
-    
     
     %% -- day cycle -- %%
     for t = 1:ndays(cyear)  % begin cycling over days in a year, starting with the first day (fday) calculated above
@@ -244,9 +236,8 @@ for cyear=1:length(iyear)      % begin cycling over years
                 while j <= nring(cyear)        % while there are still cells in the file to be operated on ...
                     
                     Vmin(j) = parameters.b(9) * (exp((parameters.b(8) + j*parameters.b(5))*0.4) - 5);  % minimum growth rate for position in the cell file
-                    Vs      = parameters.b(1);                                   % minimum critical growth, parameterized, otherwise dormancy
                     Vo(j)   = (parameters.b(6) * j * parameters.b(5)) + parameters.b(7);               % position specific modifier for Gr(t)
-                    V(j)    = Vo(j) * Gr(t,cyear) * parameters.b(4);             % position specific growth rate
+                    V(j)    = Vo(j) * Gr(t,cyear) * parameters.b(4); % position specific growth rate
                     
                     % Proceed through the j-cycle decision tree
                     if DIV(j,cyear) ~= 0 % if the cell hasn't differentiated yet ...
@@ -306,10 +297,10 @@ for cyear=1:length(iyear)      % begin cycling over years
                 end % end j cycle
                 
                 % Before the beginning of the next cambial (c) cycle, account for state of the cellular file in a multidimensional array
-                ccells(t,c,cyear) = nring(cyear);                            % number of total cells
-                ccambium(t,c,cyear) = sum(DIV(:,cyear));                  % number of those cells which can divide (e.g. are still in the cambium)
-                cxylem(t,c,cyear) = ccells(t,c,cyear) - ccambium(t,c,cyear); % number of differentiated cells
-                
+                % not currently operational for speed purposes, since not yet used elsewhere
+                % ccells(t,c,cyear) = nring(cyear);                            % number of total cells
+                % ccambium(t,c,cyear) = sum(~isnan(DIV(:,cyear)));             % number of those cells which can divide (e.g. are still in the cambium)
+                % cxylem(t,c,cyear) = ccells(t,c,cyear) - ccambium(t,c,cyear); % number of differentiated cells
                 
             end   % end c-cyle
         end   % end of day (t-cycle) here; soil moisture, transpiration, snow melt, soil thaw
@@ -325,7 +316,7 @@ for cyear=1:length(iyear)      % begin cycling over years
         end
         
         % transpiration
-        trt                 = parameters.k(2) * exp(T(t,cyear) * parameters.k(3));
+        trt             = parameters.k(2) * exp(T(t,cyear) * parameters.k(3));
         trans(t,cyear)  = trt * GrTrans(t,cyear);
         
         %% calculate snow melting and modified precipitation
@@ -347,7 +338,6 @@ for cyear=1:length(iyear)      % begin cycling over years
             if snow(t,cyear) - xmelt(t,cyear) < 0; xmelt(t,cyear) = snow(t,cyear); end  % you can't melt more snow than there is ...
             if xmelt(t,cyear) < 0; xmelt(t,cyear) = 0; end
         end
-        
         
         % Next, we'll figure out how much snow there will be for the next day
         if t < ndays(cyear)
@@ -382,9 +372,9 @@ for cyear=1:length(iyear)      % begin cycling over years
             else
                 sm(1,cyear+1) = parameters.Wmin;
             end
-            if sm(1,cyear+1) <= parameters.Wmin; sm(1,cyear+1) = parameters.Wmin; end; % error catching
-            if sm(1,cyear+1) >= parameters.Wmax; sm(1,cyear+1) = parameters.Wmax; end; % error catching
-            if isnan(sm(1,cyear+1)); sm(1,cyear+1) = parameters.Wmin; end;  % error catching
+            if sm(1,cyear+1) <= parameters.Wmin; sm(1,cyear+1) = parameters.Wmin; end % error catching
+            if sm(1,cyear+1) >= parameters.Wmax; sm(1,cyear+1) = parameters.Wmax; end % error catching
+            if isnan(sm(1,cyear+1)); sm(1,cyear+1) = parameters.Wmin; end  % error catching
         end
         
     end % end day (t) cycle
@@ -396,7 +386,7 @@ for cyear=1:length(iyear)      % begin cycling over years
     ncambium(cyear) = sum(DIV(i,cyear));           % number of cells in the cambium for the start of the next year
     
     ii=intersect(find(RT(:,cyear)>0),find(RT(:,cyear)~=NaN)); % look for non-NaN and non-zero values within RT
-    if ~isempty(ii),
+    if ~isempty(ii)
         sday(cyear)     = RT(ii(length(ii)),cyear);      % record start of growth (sday) as time of first differentiation
         eday(cyear)     = RT(ii(1),cyear);               % record end of growth (eday) as time of last differentiation
     else
@@ -414,7 +404,7 @@ end   % end YEAR CYCLE
 
 % Create two kinds of normalized ring width chronology using number of rings
 trw = nxylem/mean(nxylem);               % calculate tree-ring width by cell number (good approximation)
-trws = sum(SI)/mean(sum(SI));   % calculate tree-ring width by cell 'size' (ring width as an of integration of Gr as filtered through the cambial model)
+trws = sum(SI)/mean(sum(SI));            % calculate tree-ring width by cell 'size' (ring width as an of integration of Gr as filtered through the cambial model)
 
 % Write output data to a single structure
 output.startYear        = syear;

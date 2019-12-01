@@ -30,24 +30,31 @@ parameters.rated = 0.0115;  % change drainage rate for the 'Humpty Dumpty' rocky
 
 % use a Latin Hypercube design to sample from the parameter space for Tf(1)
 % and Tf(2) - you may wish to use a smaller design matrix (ensembleSize) to make this demo run faster
-ensembleSize = 1000;
+ensembleSize = 100; % figure in manuscript uses ensembleSize = 1000
 X = lhsdesignbnd(ensembleSize,2,[0 11],[10 20],[false false]);
 
 % overlapping period of meteorological data and tree-ring chronology
 [~,idx1,idx2] = intersect(crn(:,1),syear:eyear);
 
 %% create an ensemble of reconstructions using the design matrix
-% beware that this look can take quite a long time! depending on the size of the design matrix X
+% beware that this look can take quite a long time (>150 seconds)! depending on the size of the design matrix X
 if 1 % use this to skip the loop by setting to 0 instead of 1
+outputt2 = NaN(length(syear:eyear),length(X));
+tic 
 for i = 1:length(X)
-     % [i]
+    % tic
      parameters.Tf(1) = X(i,1);
      parameters.Tf(2) = X(i,2);
      output(i) = vsm(T,P,phi,syear,eyear,parameters);
-     [Ro(1:2,1:2,i),Po(1:2,1:2,i)] = corrcoef([crn(idx1,2) output(i).trw(idx2)']);
      outputt2(:,i) = output(i).trw';
+     % toc
 end % end the looping over parameters in the design matrix
 end % ends the if/end skip
+toc
+
+% calculate the correlation between the actual and simulated ensemble
+[R,P] = corrcoef([crn(idx1,2) outputt2(idx2,:)]);
+R0 = R(2:end,1);
 
 % if you've previously run the code through the above loop, you may wish to save the output and 
 % skip the loop in order to speed up this demo
@@ -62,7 +69,6 @@ for j = 1:length(X)
 end
 
 % locate the simulation with the highest correlation with the actual chronology
-R0 = squeeze(Ro(1,2,:))
 bestSimulation = find(R0==max(R0)); bestSimulation = bestSimulation(1);
 
 %% create the primary figure
@@ -71,7 +77,7 @@ subplot(2,1,1)
 ex2 = plot([syear:eyear],zscore(outputt2),'color',[1 0.7 0.7],'linewidth',1); hold on
 ex = plot([syear:eyear],zscore(outputt2(:,bestSimulation)),'color',[1 0 0],'linewidth',1.5); hold on
 rx = plot(crn(:,1),zscore(crn(:,2)),'k','linewidth',1.5);
-lx = legend([ex2(1) ex(1) rx],'ENSEMBLE','BEST','REAL','location','southwest')
+lx = legend([ex2(1) ex(1) rx],'ENSEMBLE','BEST','REAL','location','southwest');
 legend boxoff
 set(lx,'Position',[0.22 0.81 0.18 0.10])
 xlim([1890 2005])

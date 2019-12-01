@@ -35,12 +35,12 @@ Tfil = vsm_filter(T0,'V'); % mimic of the lowpass FORTRAN filter used in the FOR
 T = Tfil; % use the lowpass filtered temperature
 
 %% Run the MATLAB mimic model
-tic
-output = vsm(T,P,phi,syear,eyear,parameters)
-toc %  0.28 seconds for a 22 year long simulation on an late 2015 Macbook Pro 2.6GHz i7, 16 GB 1600 MHz DDR3
+tic % based on testing, this loop may take anywhere from 1 to 20 seconds, depending on your system
+output = vsm(T,P,phi,syear,eyear,parameters);
+toc %  
 
 % calculate correlation between actual chronology and simulated
-[Ro,Po] = corrcoef([chronology(:,2) output.trw']);
+[Ro] = corrcoef([chronology(:,2) output.trw']);
 
 %% diagnostic figures
 figure(1); clf
@@ -66,12 +66,10 @@ xlabel('DAY OF YEAR')
 set(gca,'xminortick','on','yminortick','on')
 text(15,0.9,'C','fontsize',14)
 
-
 subplot(2,2,3)
 snx = plot(mean(output.snowdepth/100,2),'k'); hold on;
 smx = plot(mean(output.sm,2),'b'); 
 tnx = plot(mean(output.transpiration,2),'r'); 
-% ylim([0 5])
 [lx,icons]  = legend([snx tnx smx],'SNOW/100 (mm)','TRANS (mm/d)','SM (v/v)','location','northwest','AutoUpdate','off'); legend boxoff;
 set(lx,'FontSize',8)
 pos = get(lx,'Position'); set(lx,'Position',[pos(1)-0.015 pos(2)+0.015 pos(3) pos(4)])
@@ -86,18 +84,21 @@ print -depsc white_panel1.eps
 clear Ro Po
 
 %% test sensitivity to soil drainage rate
-drainageRates = 0.001:0.0001:0.0200; 
+% you may wish to use a coarser valueStep at first in order to reduce the time spent in the loop
+valueStep = 0.0001;
+drainageRates = 0.001:valueStep:0.0200; 
 
-tic  % you may wish to use a coarser range of rates in order to reduce the time spent in this loop
+tic  % based on testing, this may take anywhere from 40 to >200 seconds
+outputm = NaN(length(syear:eyear),size(drainageRates,2));
 for i = 1:length(drainageRates)
     parameters.rated = drainageRates(i);
     output(i) = vsm(T,P,phi,syear,eyear,parameters);
     [Ro(1:2,1:2,i),Po(1:2,1:2,i)] = corrcoef([chronology(:,2) output(i).trw']);
     outputm(:,i) = output(i).trw';
 end
-toc %
+toc 
 
-R0 = squeeze(Ro(1,2,:))
+R0 = squeeze(Ro(1,2,:));
 bestSimulation = find(R0==max(R0)); bestSimulation = bestSimulation(1);
 
 %% 
