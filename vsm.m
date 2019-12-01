@@ -128,8 +128,12 @@ for cyear=1:length(iyear)      % begin cycling over years
     sum_temperature = -Inf;                         % (re)initialize sum-of-temperature variable
     tt = 1;                                         % begin on the first day of the year (day counter)
     while sum_temperature < parameters.Tg && tt < ndays(cyear) % as long as sum-of-temperatures has not crossed threshold to begin growth ...
-        sum_temperature = nansum(T(tt:tt+parameters.K(9),cyear)); % sum over the period set in the parameter K(9)
-        fday(cyear) = tt+parameters.K(9);                      % set the first day to begin growth to the current day (in case we cross the threshold)
+        if exist('nansum')==2
+		sum_temperature = nansum(T(tt:tt+parameters.K(9),cyear)); % sum over the period set in the parameter K(9)
+	else
+		sum_temperature = sum(T(tt:tt+parameters.K(9),cyear)); % allowd Octave compatibility
+	end
+		fday(cyear) = tt+parameters.K(9);                      % set the first day to begin growth to the current day (in case we cross the threshold)
         tt = tt + 1;                                % increment the day counter
     end                                             % once growing degree days have crossed threshold, cambial activity can begin
     
@@ -137,8 +141,12 @@ for cyear=1:length(iyear)      % begin cycling over years
     % calculate growing degree days; When is it time to start soil thaw?
     sum_st_temperature = -Inf;  st = 1;                      % (re)initialize sum-of-temperature variable
     while sum_st_temperature < parameters.Tm && st < ndays(cyear)-parameters.K(10); % as long as sum-of-temperatures has not crossed threshold to begin thaw ...
-        sum_st_temperature = nansum(T(st:st+parameters.K(10),cyear));    % ... sum over the period set in the parameter K(10)
-        stday(cyear) = st + parameters.K(10);
+        if exist('nansum')==2
+		sum_st_temperature = nansum(T(st:st+parameters.K(10),cyear));    % ... sum over the period set in the parameter K(10)
+	else
+		sum_st_temperature = sum(T(st:st+parameters.K(10),cyear));    % ... allow Octave compatibility
+	end
+		stday(cyear) = st + parameters.K(10);
         st = st + 1;
         if st == ndays(cyear) - (parameters.K(10) + 1); stday(cyear) = ndays(cyear); end % this is the condition where soil thaw never begins (uncommon at best)
     end
@@ -299,7 +307,7 @@ for cyear=1:length(iyear)      % begin cycling over years
                 
                 % Before the beginning of the next cambial (c) cycle, account for state of the cellular file in a multidimensional array
                 ccells(t,c,cyear) = nring(cyear);                            % number of total cells
-                ccambium(t,c,cyear) = nansum(DIV(:,cyear));                  % number of those cells which can divide (e.g. are still in the cambium)
+                ccambium(t,c,cyear) = sum(DIV(:,cyear));                  % number of those cells which can divide (e.g. are still in the cambium)
                 cxylem(t,c,cyear) = ccells(t,c,cyear) - ccambium(t,c,cyear); % number of differentiated cells
                 
                 
@@ -406,7 +414,7 @@ end   % end YEAR CYCLE
 
 % Create two kinds of normalized ring width chronology using number of rings
 trw = nxylem/mean(nxylem);               % calculate tree-ring width by cell number (good approximation)
-trws = nansum(SI)/nanmean(nansum(SI));   % calculate tree-ring width by cell 'size' (ring width as an of integration of Gr as filtered through the cambial model)
+trws = sum(SI)/mean(sum(SI));   % calculate tree-ring width by cell 'size' (ring width as an of integration of Gr as filtered through the cambial model)
 
 % Write output data to a single structure
 output.startYear        = syear;

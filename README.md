@@ -24,13 +24,17 @@ where `T` is the daily temperature (in ), `P` is the daily precipitation (in ), 
 
 `vsm` expects an input structure `parameters` that contains the tunable parameters that determine model behavior. 
 
+## Missing Input Data
+
+Although the code has been built to attempt to catch errors related to missing input data, you should estimate or fill missing temperature and precipitation data values prior to running `vsm`.  You may use built-in MATLAB functions like `fillmissing`, but we also include a utility function `vsm_fillmiss` that mimics the internal missing value filling in the original FORTRAN code. 
+
 ## Known Limitations
 
-The original FORTRAN model was developed for Northern Hemisphere applications.  As a consequence the definition of a year in the model is from January 1st to December 31st, which is unlikely to be adequate for Southern Hemisphere applications. 
+The original FORTRAN model was developed for Northern Hemisphere applications.  As a consequence the definition of a year in the model is from January 1st to December 31st, which is unlikely to be adequate for Southern Hemisphere tree-ring applications. 
 
 ## Octave Functionality
 
-The core model function `vsm` works in Octave without modification. Some of the demo scripts and the helper functions therein, however, use commands not available or with a different syntax in Octave
+The core model function `vsm` works in Octave without modification, largely by avoiding use of `nansum` and `nanmean`. Some of the demo scripts and the helper functions therein, however, use commands not available or with a different syntax in Octave and in general Octave (testing on version 4.4.1 running on a Macbook Pro with Darwin Kernel Version 17.7.0) was found to be substantially slower than the same operations in MATLAB> 
 
 ## License
 
