@@ -88,7 +88,7 @@ clear Ro Po
 valueStep = 0.0001;
 drainageRates = 0.001:valueStep:0.0200; 
 
-tic  % based on testing, this may take anywhere from 40 to >200 seconds
+tic  % based on testing, this may take anywhere from 20 to 120 seconds
 outputm = NaN(length(syear:eyear),size(drainageRates,2));
 for i = 1:length(drainageRates)
     parameters.rated = drainageRates(i);

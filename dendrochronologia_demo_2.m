@@ -30,7 +30,7 @@ parameters.rated = 0.0115;  % change drainage rate for the 'Humpty Dumpty' rocky
 
 % use a Latin Hypercube design to sample from the parameter space for Tf(1)
 % and Tf(2) - you may wish to use a smaller design matrix (ensembleSize) to make this demo run faster
-ensembleSize = 100; % figure in manuscript uses ensembleSize = 1000
+ensembleSize = 100; % figure in manuscript uses ensembleSize = 1000, which could take 15 to 30 minutes
 X = lhsdesignbnd(ensembleSize,2,[0 11],[10 20],[false false]);
 
 % overlapping period of meteorological data and tree-ring chronology
@@ -42,12 +42,12 @@ if 1 % use this to skip the loop by setting to 0 instead of 1
 outputt2 = NaN(length(syear:eyear),length(X));
 tic 
 for i = 1:length(X)
-    % tic
+    tic
      parameters.Tf(1) = X(i,1);
      parameters.Tf(2) = X(i,2);
      output(i) = vsm(T,P,phi,syear,eyear,parameters);
      outputt2(:,i) = output(i).trw';
-     % toc
+    toc
 end % end the looping over parameters in the design matrix
 end % ends the if/end skip
 toc
