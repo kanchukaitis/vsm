@@ -22,7 +22,7 @@ The code model function is `vsm`. This function runs both the Environmental and 
 
 where `T` is the daily temperature (in ), `P` is the daily precipitation (in ), `phi` is the latitude of the tree-ring site or the latitude of the source of the daily meteorological data, `syear` is the starting year of the simulation (the first year of the daily meteorological data), `eyear` is the last year of the simulation, and `parameters` is the name of the structure containing the parameters. `varargin` allows addition variables to be passed to the model without affecting the standard, required set (the first 6 input variables). `output` is a structure containing the annual, daily, and cell-specific outputs from the simulation. 
 
-`vsm` expects an input structure `parameters` that contains the tunable parameters that determine model behavior. 
+`vsm` expects an input structure `parameters` that contains the tunable parameters that determine model behavior. Several example parameter sets are included in this distribution (`generic_parameters`,`e06_parameters`, and `a06_parameters)
 
 ## Missing Input Data
 
