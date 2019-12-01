@@ -41,7 +41,7 @@ The original FORTRAN model was developed for Northern Hemisphere applications.  
 
 ## Octave Functionality
 
-The core model function `vsm` works in Octave without modification (avoiding use of `nansum` and `nanmean` that are not core Octave distributions). Some of the demo scripts and the helper functions therein, however, use commands not available or with a different syntax in Octave and in general Octave (testing on version 4.4.1 running on a Macbook Pro with Darwin Kernel Version 17.7.0) was found to be substantially slower than the same operations in MATLAB. 
+The core model function `vsm` works in Octave without modification (avoiding use of `nansum` and `nanmean` that are not part of core Octave distributions). Some of the demo scripts and the helper functions therein, however, use commands not available or with a different syntax in Octave and in general Octave (testing on version 4.4.1 running on a Macbook Pro with Darwin Kernel Version 17.7.0) was found to be substantially slower than the same operations in MATLAB. 
 
 ## License
 
