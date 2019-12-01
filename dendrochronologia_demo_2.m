@@ -120,4 +120,4 @@ xlabel('DAY OF YEAR','FontSize',12)
 set(gca,'xminortick','on','yminortick','on')
 text(15,0.9,'C','fontsize',14)
 
-printeps('mohonk_panel.eps',2)
+print -depsc mohonk_panel.eps
