@@ -1,4 +1,5 @@
 % This is a demo script for the MATLAB version of the Vaganov-Shashkin model (VSM)
+% This script produces the analyses for Yakutia/Indigirka in Anchukaitis et al. 2019 (submitted)
 clear; close all; clc;  % clear the workspace
 
 myColormap = [... % 'Reds' from ColorBrewer
