@@ -30,7 +30,7 @@ parameters.rated = 0.0115;  % change drainage rate for the 'Humpty Dumpty' rocky
 
 % use a Latin Hypercube design to sample from the parameter space for Tf(1)
 % and Tf(2) - you may wish to use a smaller design matrix (ensembleSize) to make this demo run faster
-ensembleSize = 100; % figure in manuscript uses ensembleSize = 1000, which could take 15 to 30 minutes
+ensembleSize = 1000; % figure in manuscript uses ensembleSize = 1000, which could take 15 to 30 minutes
 X = lhsdesignbnd(ensembleSize,2,[0 11],[10 20],[false false]);
 
 % overlapping period of meteorological data and tree-ring chronology
@@ -58,7 +58,7 @@ R0 = R(2:end,1);
 
 % if you've previously run the code through the above loop, you may wish to save the output and 
 % skip the loop in order to speed up this demo
-% save mohonk_temperature_ensemble_lh2.mat
+save mohonk_temperature_ensemble_lh2.mat
 % load mohonk_temperature_ensemble_lh2.mat
 
 % calculate mean growth rates over years for the ensemble members
@@ -77,7 +77,7 @@ subplot(2,1,1)
 ex2 = plot([syear:eyear],zscore(outputt2),'color',[1 0.7 0.7],'linewidth',1); hold on
 ex = plot([syear:eyear],zscore(outputt2(:,bestSimulation)),'color',[1 0 0],'linewidth',1.5); hold on
 rx = plot(crn(:,1),zscore(crn(:,2)),'k','linewidth',1.5);
-lx = legend([ex2(1) ex(1) rx],'ENSEMBLE','BEST','REAL','location','southwest');
+lx = legend([ex2(1) ex(1) rx],'ENSEMBLE','BEST','OBSERVED','location','southwest');
 legend boxoff
 set(lx,'Position',[0.22 0.81 0.18 0.10])
 xlim([1890 2005])

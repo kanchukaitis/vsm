@@ -65,15 +65,17 @@ good    = find(commonYear~=1991);
 %% 
 figure(1); clf
 subplot(2,1,1)
-plot([startYear:endYear],standardize(simulatedSeries),'color',[1 0.8 0.8],'linewidth',1.5); hold on
-plot([startYear:endYear],standardize(simulatedSeries(:,2)),'r','linewidth',1.5); hold on
-plot(Indigirka(:,1),standardize(Indigirka(:,2)),'k','linewidth',1.5)
+ex1 = plot([startYear:endYear],standardize(simulatedSeries),'color',[1 0.8 0.8],'linewidth',1.5); hold on
+ex2 = plot([startYear:endYear],standardize(simulatedSeries(:,2)),'r','linewidth',1.5); hold on
+rx = plot(Indigirka(:,1),standardize(Indigirka(:,2)),'k','linewidth',1.5)
 xlim([startYear-1 endYear+1])
 xlabel('YEAR')
 ylabel('INDEX')
-ylim([-3 3])
+ylim([-3.5 3])
 set(gca,'XMinorTick','on','YMinorTick','on')
 text(1945,2.4,'A','fontsize',14)
+legend([ex1(1) ex2(1) rx],'ENSEMBLE','BEST','OBSERVED','location','southeast')
+legend boxoff
 title('LARCH, INDIGIRKA (YAKUTIA), RUSSIA')
 
 subplot(2,2,3)

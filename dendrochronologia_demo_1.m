@@ -47,7 +47,7 @@ figure(1); clf
 subplot(2,1,1)
 plot([syear:eyear],zscore(output.trw),'r','linewidth',1.5); hold on
 plot(chronology(:,1),zscore(chronology(:,2)),'k','linewidth',1.5)
-legend('SIMULATED','REAL','location','southeast')
+legend('SIMULATED','OBSERVED','location','southeast')
 legend boxoff
 title('WHITE MOUNTAINS, METHUSELAH WALK')
 xlabel('YEAR')
@@ -107,7 +107,7 @@ subplot(2,1,1)
 ex1 = plot([syear:eyear],zscore(outputm),'color',[1 0.8 0.8],'linewidth',1); hold on
 ex2 = plot([syear:eyear],zscore(outputm(:,bestSimulation)),'color',[1 0 0],'linewidth',1.5); hold on
 rx = plot(chronology(:,1),zscore(chronology(:,2)),'k','linewidth',1.5);
-legend([ex1(1) ex2(1) rx],'ENSEMBLE','BEST','REAL','location','southeast')
+legend([ex1(1) ex2(1) rx],'ENSEMBLE','BEST','OBSERVED','location','southeast')
 legend boxoff
 title('WHITE MOUNTAINS, METHUSELAH WALK')
 xlabel('YEAR')
