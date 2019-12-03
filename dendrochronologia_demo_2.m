@@ -31,7 +31,7 @@ parameters.rated = 0.0115;  % change drainage rate for the 'Humpty Dumpty' rocky
 
 % use a Latin Hypercube design to sample from the parameter space for Tf(1)
 % and Tf(2) - you may wish to use a smaller design matrix (ensembleSize) to make this demo run faster
-ensembleSize = 1000; % figure in manuscript uses ensembleSize = 1000, which could take 15 to 30 minutes
+ensembleSize = 100; % figure in manuscript uses ensembleSize = 1000, which could take 15 to 30 minutes
 X = lhsdesignbnd(ensembleSize,2,[0 11],[10 20],[false false]);
 
 % overlapping period of meteorological data and tree-ring chronology
