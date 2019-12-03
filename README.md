@@ -8,7 +8,7 @@ Please cite this work when using this model:
 
 Anchukaitis, K.J., M.N. Evans, M. K. Hughes, and E. Vaganov, An interpreted language implementation of the Vaganov-Shashkin tree-ring proxy system model, submitted to *Dendrochronologia*, 2019
 
-A preprint is available at EarthaArXiv. 
+A preprint will be available at EartharXiv. 
 
 Please inform Kevin Anchukaitis if you identify any bugs.  
 
