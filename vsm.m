@@ -376,6 +376,8 @@ for cyear=1:length(iyear)      % begin cycling over years
             if sm(1,cyear+1) >= parameters.Wmax; sm(1,cyear+1) = parameters.Wmax; end % error catching
             if isnan(sm(1,cyear+1)); sm(1,cyear+1) = parameters.Wmin; end  % error catching
         end
+    
+        cellCount(t,cyear) = nring(cyear);
         
     end % end day (t) cycle
     
@@ -427,4 +429,6 @@ output.soilDepth        = dep;
 output.fday             = fday;
 output.startDay         = sday;
 output.endDay           = eday;
-output.parameters       = parameters; 
+output.parameters       = parameters;
+output.difftime         = RT;
+output.cellCount        = cellCount;

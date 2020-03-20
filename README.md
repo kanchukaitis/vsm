@@ -6,7 +6,7 @@ This repository provides the Vaganov-Shashkin tree-ring growth model (VSM) in MA
 
 Please cite this work when using this model:
 
-Anchukaitis, K.J., M.N. Evans, M. K. Hughes, and E. Vaganov, An interpreted language implementation of the Vaganov-Shashkin tree-ring proxy system model, submitted to *Dendrochronologia*, 2019
+Anchukaitis, K.J., M.N. Evans, M. K. Hughes, and E. Vaganov, An interpreted language implementation of the Vaganov-Shashkin tree-ring proxy system model, *Dendrochronologia*, 60, 125677, doi:[10.1016/j.dendro.2020.125677](https://doi.org/10.1016/j.dendro.2020.125677), 2020
 
 A preprint is available at [EartharXiv](https://doi.org/10.31223/osf.io/ruyad). 
 
