@@ -31,7 +31,7 @@ parameters.rated = 0.0115;  % change drainage rate for the 'Humpty Dumpty' rocky
 
 % use a Latin Hypercube design to sample from the parameter space for Tf(1)
 % and Tf(2) - you may wish to use a smaller design matrix (ensembleSize) to make this demo run faster
-ensembleSize = 100; % figure in manuscript uses ensembleSize = 1000, which could take 15 to 30 minutes
+ensembleSize = 1000; % figure in manuscript uses ensembleSize = 1000, which could take 15 to 30 minutes
 X = lhsdesignbnd(ensembleSize,2,[0 11],[10 20],[false false]);
 
 % overlapping period of meteorological data and tree-ring chronology
@@ -39,9 +39,9 @@ X = lhsdesignbnd(ensembleSize,2,[0 11],[10 20],[false false]);
 
 %% create an ensemble of reconstructions using the design matrix
 % beware that this look can take quite a long time (>150 seconds)! depending on the size of the design matrix X
-if 1 % use this to skip the loop by setting to 0 instead of 1
-outputt2 = NaN(length(syear:eyear),length(X));
-tic 
+tic
+if 0 % use this to skip the loop by setting to 0 instead of 1
+outputt2 = NaN(length(syear:eyear),length(X)); 
 for i = 1:length(X)
     % tic
      parameters.Tf(1) = X(i,1);
@@ -53,14 +53,14 @@ end % end the looping over parameters in the design matrix
 end % ends the if/end skip
 toc
 
+% if you've previously run the code through the above loop, you may wish to save the output and 
+% skip the loop in order to speed up this demo
+% save mohonk_temperature_ensemble_lh2.mat
+load mohonk_temperature_ensemble_lh2.mat
+
 % calculate the correlation between the actual and simulated ensemble
 [R,P] = corrcoef([crn(idx1,2) outputt2(idx2,:)]);
 R0 = R(2:end,1);
-
-% if you've previously run the code through the above loop, you may wish to save the output and 
-% skip the loop in order to speed up this demo
-save mohonk_temperature_ensemble_lh2.mat
-% load mohonk_temperature_ensemble_lh2.mat
 
 % calculate mean growth rates over years for the ensemble members
 for j = 1:length(X)
@@ -84,6 +84,7 @@ set(lx,'Position',[0.22 0.81 0.18 0.10])
 xlim([1890 2005])
 title('EASTERN HEMLOCK, MOHONK, SHAWANGUNK MOUNTAINS')
 xlabel('YEAR')
+ylabel('INDEX')
 set(gca,'xminortick','on','yminortick','on')
 text(1891,3.5,'A','fontsize',14)
 
@@ -118,7 +119,9 @@ lx2 = legend([px4(1) px3(1) px5(1)],'G','g_T','g_W','location','south'); legend 
 xlim([1 365]); ylim([0 1])
 title('GROWTH RATES','FontSize',12)
 xlabel('DAY OF YEAR','FontSize',12)
+ylabel('GROWTH RATE','rot',-90,'VerticalAlignment','bottom')
+set(gca,'yaxislocation','right')
 set(gca,'xminortick','on','yminortick','on')
 text(15,0.9,'C','fontsize',14)
 
-print -depsc mohonk_panel.eps
+print -depsc -painters mohonk_panel.eps

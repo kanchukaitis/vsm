@@ -48,8 +48,8 @@ generic_parameters
 %% Run the MATLAB mimic model
 for j = 0:10  
     parameters.Tf(1) = j;
-    output = vsm(Tfil,P,phi,startYear,endYear,parameters);
-    simulatedSeries(:,j+1) = output.trw';
+    output(j+1) = vsm(Tfil,P,phi,startYear,endYear,parameters);
+    simulatedSeries(:,j+1) = output(j+1).trw';
 end
 
 simulatedSeries(simulatedSeries==0) = NaN;  % for plotting

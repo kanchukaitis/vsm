@@ -52,6 +52,7 @@ legend('SIMULATED','OBSERVED','location','southeast')
 legend boxoff
 title('WHITE MOUNTAINS, METHUSELAH WALK')
 xlabel('YEAR')
+ylabel('INDEX')
 set(gca,'xminortick','on','yminortick','on')
 text(1955.5,1.5,'A','fontsize',14)
 text(1957,1.2,['r = ',num2str(Ro(1,2),'%1.2f') ', p < 0.001'],'fontsize',12) %  num2str(Po(1,2),'%1.5f
@@ -64,6 +65,8 @@ lx2 = legend('G','g_W','g_T','location','west'); legend boxoff; %
 xlim([1 365]); ylim([0 1])
 title('GROWTH RATES')
 xlabel('DAY OF YEAR')
+ylabel('GROWTH RATE','rot',-90,'VerticalAlignment','bottom')
+set(gca,'yaxislocation','right')
 set(gca,'xminortick','on','yminortick','on')
 text(15,0.9,'C','fontsize',14)
 
@@ -103,7 +106,7 @@ R0 = squeeze(Ro(1,2,:));
 bestSimulation = find(R0==max(R0)); bestSimulation = bestSimulation(1);
 
 %% 
-figure(2); clf;
+figure(2); clf
 subplot(2,1,1)
 ex1 = plot([syear:eyear],zscore(outputm),'color',[1 0.8 0.8],'linewidth',1); hold on
 ex2 = plot([syear:eyear],zscore(outputm(:,bestSimulation)),'color',[1 0 0],'linewidth',1.5); hold on
@@ -112,6 +115,7 @@ legend([ex1(1) ex2(1) rx],'ENSEMBLE','BEST','OBSERVED','location','southeast')
 legend boxoff
 title('WHITE MOUNTAINS, METHUSELAH WALK')
 xlabel('YEAR')
+ylabel('INDEX')
 set(gca,'xminortick','on','yminortick','on')
 text(1955.5,2.5,'A','fontsize',14)
 
