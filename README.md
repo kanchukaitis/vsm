@@ -8,13 +8,13 @@ Please cite this work when using this model:
 
 Anchukaitis, K.J., M.N. Evans, M. K. Hughes, and E. Vaganov, An interpreted language implementation of the Vaganov-Shashkin tree-ring proxy system model, *Dendrochronologia*, 60, 125677, doi:[10.1016/j.dendro.2020.125677](https://doi.org/10.1016/j.dendro.2020.125677), 2020
 
-A preprint is available at [EartharXiv](https://doi.org/10.31223/osf.io/ruyad). 
+A earlier preprint is still available at [EartharXiv](https://doi.org/10.31223/osf.io/ruyad). 
 
 Please inform Kevin Anchukaitis if you identify any bugs.  
 
 ## Basic Applications
 
-The code model function is `vsm`. This function runs both the Environmental and Growth blocks using daily temperature and precipitation input as well as latitude (for daylength calculations).  The function call is:
+The core model function is `vsm`. This function runs both the Environmental and Growth blocks using daily temperature and precipitation input as well as latitude (for daylength calculations).  The function call is:
 
 ```matlab
 [output] = vsm(T,P,phi,syear,eyear,parameters,varargin)
@@ -38,6 +38,8 @@ This repository comes with three demonstration files that recreate the figures i
 ## Known Limitations
 
 The original FORTRAN model was developed for Northern Hemisphere applications.  As a consequence the definition of a year in the model is from January 1st to December 31st, which is unlikely to be adequate for Southern Hemisphere tree-ring applications. 
+
+The original FORTRAN also had additional modules for calculating cell size and which could also be used to derive density-type metrics.  This module has not be migrated to MATLAB. 
 
 ## Octave Functionality
 
