@@ -2,6 +2,12 @@
 
 This repository provides the Vaganov-Shashkin tree-ring growth model (VSM) in MATLAB (Octave-compatible).  VSM, originally written in Fortran, mimics subdaily and daily resolution processes of cambial growth in trees as a function of soil moisture, air temperature, and insolation, with environmental forcing modeled as the principle of limiting factors.  Our re-implementation in a high level interpreted language, while sacrificing speed, provides opportunities to systematically evaluate model parameters, generate large ensembles of simulated tree-ring chronologies, and embed proxy system modeling within data assimilation approaches to climate reconstruction.  We also provide examples of model applications which permit process-level understanding of tree ring width variations in response to environmental variations and boundary conditions. 
 
+## Versions, updates, and bugfixes
+
+* Version 1.1 reflects a bugfix with how the growth rate effect on transpiration was set.  In the previous version the first day of growth (`fday`) specifically when used to determine when growth started to influence transpiration did not have the index to specify the year.  The result was that as the simulation proceeded it was more likely that growth rates in the very first days of the year (if they were non-zero growth rates) influenced transpiration.  Because these growth rates tend to be small (or zero) and this bug only influenced the early part of the year, in most cases this bug did not have any significant effect on the simulation; however, in some cases this bug could cause a 1 cell difference from a corrected version that properly uses the `fday` from the specific year.  The bug was identified by [Dr. Feng Wang](https://www.researchgate.net/profile/Feng-Wang-167) at the correction and update made January 22nd, 2025. 
+
+* Version 1.0 is the version released with the publication of Anchukaitis et al. (2020). 
+
 ## Citation
 
 Please cite this work when using this model:
