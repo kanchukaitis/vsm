@@ -45,7 +45,7 @@ This repository comes with three demonstration files that recreate the figures i
 
 The original FORTRAN model was developed for Northern Hemisphere applications.  As a consequence the definition of a year in the model is from January 1st to December 31st, which is unlikely to be adequate for Southern Hemisphere tree-ring applications. 
 
-The original FORTRAN also had additional modules for calculating cell size and which could also be used to derive density-type metrics.  This module has not be migrated to MATLAB. 
+The original FORTRAN also had additional modules for calculating cell size and which could also be used to derive density-type metrics.  This module has not be migrated to MATLAB because site-specific parameters were required to use this functionality. 
 
 ## Octave Functionality
 
