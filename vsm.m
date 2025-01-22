@@ -17,7 +17,8 @@ function [output] = vsm(T,P,phi,syear,eyear,parameters,varargin)
 % metrics and final simulated ring width
 
 % File History:
-% last modified 5 December 2018 Kevin Anchukaitis
+% first published version 5 December 2018 Kevin Anchukaitis
+% last modified 21 January 2025 by Feng Wang and Kevin Anchukaitis, fixed non-specific year reference in fday loop for transpiration
 %
 % Citation: Anchukaitis, Evans, Hughes, Vaganov, VSM: An implementation of the Vaganov-Shashkin Cambial
 %           Growth Model in MATLAB, submitted to Dendrochronologia, 2018
@@ -25,7 +26,7 @@ function [output] = vsm(T,P,phi,syear,eyear,parameters,varargin)
 if parameters.display==1
     
     disp('--------------------------------------------------------------')
-    disp('Vaganov-Shashkin Cambial Growth Model [vsm] [version 1.0]')
+    disp('Vaganov-Shashkin Cambial Growth Model [vsm] [version 1.1]')
     disp(' ')
     
 end
@@ -309,7 +310,7 @@ for cyear=1:length(iyear)      % begin cycling over years
         
         %% CALCULATE ENVIRONMENTAL VARIABLES
         % Calculate growth rate to use for the transpiration calculation (modified by rooting depth)
-        if t < fday
+        if t < fday(cyear)
             GrTrans(t,cyear) = 0; % no transpiration if no growth
         else
             GrTrans(t,cyear) = Gr(t,cyear);
